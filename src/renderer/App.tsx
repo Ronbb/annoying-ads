@@ -25,13 +25,9 @@ const App: FC = () => {
       const videoElement = videoRef.current;
       if (!videoElement) return;
 
-      playerRef.current = videojs(videoElement, options, () => {
-        console.log("player is ready");
+      playerRef.current = videojs(videoElement, options, function () {
+        this.requestFullscreen();
       });
-    } else {
-      // you can update player here [update player through props]
-      const player = playerRef.current;
-      player.src();
     }
   }, [options, videoRef]);
 

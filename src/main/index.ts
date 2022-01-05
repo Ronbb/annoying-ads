@@ -1,18 +1,23 @@
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, Menu } from "electron";
 import { join } from "path";
 
 let messageParent: BrowserWindow | null = null;
 
-const createVideoWindow = () => {
-  const mainWindow = new BrowserWindow();
+const createVideoWindow = async () => {
+  const mainWindow = new BrowserWindow({
+    backgroundColor: "#000",
+    fullscreen: true,
+  });
 
   if (app.isPackaged) {
-    mainWindow.loadFile(join(__dirname, "..", "renderer", "index.html"));
+    await mainWindow.loadFile(join(__dirname, "..", "renderer", "index.html"));
   } else {
-    mainWindow.loadURL("http://127.0.0.1:3000");
-    mainWindow.webContents.openDevTools();
+    await mainWindow.loadURL("http://127.0.0.1:3000");
+    // mainWindow.webContents.openDevTools();
   }
-  mainWindow.setFullScreen(true);
+
+  mainWindow.show();
+  mainWindow.focus();
 
   if (messageParent) {
     messageParent.close();
@@ -42,6 +47,8 @@ const createMessageWindow = async () => {
     }
   }
 };
+
+Menu.setApplicationMenu(null);
 
 app.whenReady().then(() => {
   createMessageWindow()
