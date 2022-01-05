@@ -7,7 +7,9 @@ const main = async () => {
   const build = join(cwd(), "build");
   const dist = join(cwd(), "dist");
 
-  await rm(dist, { recursive: true });
+  try {
+    await rm(dist, { recursive: true });
+  } catch (_) {}
 
   await api.package({
     dir: build,
